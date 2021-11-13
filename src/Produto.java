@@ -1,3 +1,3 @@
 public abstract class Produto {
-    // private int teste;
+    // private int;
 }
