@@ -1,7 +1,7 @@
 public class Cliente {
     String nome;
     String cpf;
-    boolean ativo;
+    boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
 
     public Cliente(String nome, String cpf, boolean ativo) {
         this.nome = nome;
