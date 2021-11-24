@@ -9,21 +9,38 @@ public class Vendas {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime horario = LocalDateTime.now();
 
-        int indexOfProduto = Produto.getEstoqueRoupa().indexOf(produto);
+        int indexOfProduto = produto.getEstoqueProduto(produto.getCategoria()).indexOf(produto);
         ArrayList<Produto> produtosVendidos = new ArrayList<>();
 
-        // Tentar com switch?
-        if (produto.getCategoria().equals(Categoria.ROUPA)) {
+        if (produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).isEmEstoque() &&
+                    produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).getEstoque() >= quant) {
+                //TODO remover a quantidade no estoque do txt ?
+                if (cliente != null) {
 
-            if ( Produto.getEstoqueRoupa().get(indexOfProduto).isEmEstoque() &&
-                    Produto.getEstoqueRoupa().get(indexOfProduto).getEstoque() >= quant) {
-                //TODO remover a quantidade no estoque do txt
-                produto.getCadastroProdutosVendidos().
-                        add(dtf.format(horario) + ", " + produto.getNome() + ", x" + quant + ", " + produto.getPreco() + "R$, " + cliente.getNome());
-                //TODO escrever entrada no txt (cadastro de vendas)
+                    cliente.getRegistroCompras().add(dtf.format(horario) + ", " +
+                            produto.getId() + "-" + produto.getNome() + ", x" +
+                            quant + ", " +
+                            produto.getPreco() + "R$, " +
+                            cliente.getNome() + "\n");
+
+                    produto.getCadastroProdutosVendidos().
+                            add(dtf.format(horario) + ", " +
+                                    produto.getId() + "-" + produto.getNome() + ", x" +
+                                    quant + ", " +
+                                    produto.getPreco() + "R$, " +
+                                    cliente.getNome() + "\n");
+                    //TODO escrever entrada no txt (cadastro de vendas)
+                } else
+                    produto.getCadastroProdutosVendidos().
+                            add(dtf.format(horario) + ", " +
+                                    produto.getId() + "-" + produto.getNome() + ", x" +
+                                    quant + ", " +
+                                    produto.getPreco() + "R$, " +
+                                    "Cliente nao identificado.\n");
+
             } else {
                 throw new RuntimeException("Quantidade insuficiente em estoque!");
             }
-        }
+
     }
 }
