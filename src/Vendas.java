@@ -1,46 +1,58 @@
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Vendas {
 
-    public void processaVenda(Cliente cliente, Produto produto, short quant) throws RuntimeException{
+    Produto estoqueAtual;
+
+    public ArrayList<Produto> getEstoqueAtual() throws IOException {
+        return estoqueAtual.geraEstoqueProduto(); // TODO nullPointer?
+    }
+
+    public void processaVenda(Cliente cliente, int id, short quant) throws IOException {
         // Date time formatter: https://www.javatpoint.com/java-get-current-date
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime horario = LocalDateTime.now();
 
-        int indexOfProduto = produto.getEstoqueProduto(produto.getCategoria()).indexOf(produto);
-        ArrayList<Produto> produtosVendidos = new ArrayList<>();
+        Produto nextProduto;
+        for (Produto produto : getEstoqueAtual()){
+            if (produto.getId() == id) {
+                nextProduto = produto;
 
-        if (produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).isEmEstoque() &&
-                    produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).getEstoque() >= quant) {
-                //TODO remover a quantidade no estoque do txt ?
-                if (cliente != null) {
+                int indexOfProduto = nextProduto.getEstoqueProduto(produto.getCategoria()).indexOf(produto);
 
-                    cliente.getRegistroCompras().add(dtf.format(horario) + ", " +
-                            produto.getId() + "-" + produto.getNome() + ", x" +
-                            quant + ", " +
-                            produto.getPreco() + "R$, " +
-                            cliente.getNome() + "\n");
+                if (produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).isEmEstoque() &&
+                        produto.getEstoqueProduto(produto.getCategoria()).get(indexOfProduto).getEstoque() >= quant) {
+                    //TODO remover a quantidade no estoque do txt ?
+                    if (cliente != null) {
 
-                    produto.getCadastroProdutosVendidos().
-                            add(dtf.format(horario) + ", " +
-                                    produto.getId() + "-" + produto.getNome() + ", x" +
-                                    quant + ", " +
-                                    produto.getPreco() + "R$, " +
-                                    cliente.getNome() + "\n");
-                    //TODO escrever entrada no txt (cadastro de vendas)
-                } else
-                    produto.getCadastroProdutosVendidos().
-                            add(dtf.format(horario) + ", " +
-                                    produto.getId() + "-" + produto.getNome() + ", x" +
-                                    quant + ", " +
-                                    produto.getPreco() + "R$, " +
-                                    "Cliente nao identificado.\n");
+                        cliente.getRegistroCompras().add(dtf.format(horario) + ", " +
+                                produto.getId() + "-" + produto.getNome() + ", x" +
+                                quant + ", " +
+                                produto.getPreco() + "R$, " +
+                                cliente.getNome() + "\n");
 
-            } else {
-                throw new RuntimeException("Quantidade insuficiente em estoque!");
+                        produto.getCadastroProdutosVendidos().
+                                add(dtf.format(horario) + ", " +
+                                        produto.getId() + "-" + produto.getNome() + ", x" +
+                                        quant + ", " +
+                                        produto.getPreco() + "R$, " +
+                                        cliente.getNome() + "\n");
+                        //TODO escrever entrada no txt (cadastro de vendas)
+                    } else
+                        produto.getCadastroProdutosVendidos().
+                                add(dtf.format(horario) + ", " +
+                                        produto.getId() + "-" + produto.getNome() + ", x" +
+                                        quant + ", " +
+                                        produto.getPreco() + "R$, " +
+                                        "Cliente nao identificado.\n");
+
+                } else {
+                    throw new RuntimeException("Quantidade insuficiente em estoque!");
+                }
             }
-
+        }
     }
 }

@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Produto {
@@ -12,7 +16,7 @@ public class Produto {
     private ArrayList<String> cadastroProdutosVendidos;         // String: data, produto, quant, valor, cliente
     private ArrayList<Produto> estoqueProduto;
 
-    public Produto(String nome, float preco, short estoque, Categoria categoria) {
+    public Produto(String nome, float preco, short estoque, Categoria categoria) throws IOException {
         this.id = hashCode();
         this.nome = nome;
         this.preco = preco;
@@ -57,28 +61,34 @@ public class Produto {
     }
     public ArrayList<String> getCadastroProdutosVendidos(){return cadastroProdutosVendidos;}
 
-    public ArrayList<Produto> geraEstoqueProduto(){
-        ArrayList<String> txt = new ArrayList<>(); // Teste
+    public ArrayList<Produto> geraEstoqueProduto() throws IOException {
         ArrayList<Produto> produtos = new ArrayList<>();
 
-        for (String linhaTxt : txt){
-            String[] produtoNaLinha = linhaTxt.split(",");
-            String categoria = produtoNaLinha[3];
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("estoqueProdutos"));
+            String linhaTxt;
+            while ((linhaTxt = reader.readLine()) != null){
+                String[] produtoNaLinha = linhaTxt.split(",");
+                String categoria = produtoNaLinha[3];
 
-            switch (categoria) {
-                case "roupa" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                        Short.parseShort(produtoNaLinha[2]), Categoria.ROUPA));
-                case "acessorio" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                        Short.parseShort(produtoNaLinha[2]), Categoria.ACESSORIO));
-                case "calcado" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                        Short.parseShort(produtoNaLinha[2]), Categoria.CALCADO));
-                default -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                        Short.parseShort(produtoNaLinha[2]), Categoria.EQUIPAMENTO));
+                switch (categoria) {
+                    case "roupa" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
+                            Short.parseShort(produtoNaLinha[2]), Categoria.ROUPA));
+                    case "acessorio" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
+                            Short.parseShort(produtoNaLinha[2]), Categoria.ACESSORIO));
+                    case "calcado" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
+                            Short.parseShort(produtoNaLinha[2]), Categoria.CALCADO));
+                    default -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
+                            Short.parseShort(produtoNaLinha[2]), Categoria.EQUIPAMENTO));
+                }
+                reader.close();
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return produtos;
     }
-    public void acrescentaEstoqueProduto(Produto produto, short acrescimo){
+    public void acrescentaEstoqueProduto(Produto produto, short acrescimo) throws IOException {
         this.estoqueProduto.remove(produto);
         this.estoqueProduto.add(new Produto(produto.getNome(),
                 produto.getPreco(),

@@ -6,7 +6,7 @@ public class Cliente {
     boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
     ArrayList<String> registroCompras;
 
-    public Cliente(String nome, String cpf, boolean ativo, ArrayList<String> registroCompras) {
+    public Cliente(String nome, String cpf, boolean ativo) {
         this.nome = nome;
         this.cpf = cpf;
         this.ativo = ativo;
