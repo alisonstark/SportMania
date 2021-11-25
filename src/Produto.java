@@ -6,15 +6,14 @@ import java.util.ArrayList;
 
 public class Produto {
     private final int id;
-    private String nome;
+    private final String nome;
     private float preco;
     private short estoque;
     private boolean emEstoque;
 
-    private Categoria categoria;
-
-    private ArrayList<String> cadastroProdutosVendidos;         // String: data, produto, quant, valor, cliente
-    private ArrayList<Produto> estoqueProduto;
+    protected Categoria categoria;
+    protected ArrayList<String> cadastroProdutosVendidos;         // String: data, produto, quant, valor, cliente
+    protected ArrayList<Produto> estoqueProduto;
 
     public Produto(String nome, float preco, short estoque, Categoria categoria) throws IOException {
         this.id = hashCode();

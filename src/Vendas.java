@@ -16,6 +16,8 @@ public class Vendas {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime horario = LocalDateTime.now();
 
+        //TODO receber o cpf para identificação do cliente no momento de processar a compra
+
         Produto nextProduto;
         for (Produto produto : getEstoqueAtual()){
             if (produto.getId() == id) {
