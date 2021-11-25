@@ -8,24 +8,23 @@ public class Produto {
     private final int id;
     private final String nome;
     private float preco;
-    private short estoque;
+    private int estoque;
     private boolean emEstoque;
 
     protected Categoria categoria;
     protected ArrayList<String> cadastroProdutosVendidos;         // String: data, produto, quant, valor, cliente
-    protected ArrayList<Produto> estoqueProduto;
 
-    public Produto(String nome, float preco, short estoque, Categoria categoria) throws IOException {
+    public Produto(String nome, float preco, int estoque, Categoria categoria) {
         this.id = hashCode();
         this.nome = nome;
         this.preco = preco;
-        this.estoque = estoque >= 0 ? estoque : 0;
+        this.estoque = Math.max(estoque, 0);
         this.categoria = categoria;
         this.emEstoque = estoque != 0;
 
         this.cadastroProdutosVendidos = new ArrayList<>();
-        this.estoqueProduto = geraEstoqueProduto();
     }
+
     public int getId() {
         return id;
     }
@@ -38,14 +37,14 @@ public class Produto {
     public void setPreco(float preco) {
         this.preco = preco;
     }
-    public short getEstoque(){return estoque;}
+    public int getEstoque(){return estoque;}
     public void setEstoque(short adicional){this.estoque += adicional;}
     public Categoria getCategoria(){return categoria;}
 
-    public ArrayList<Produto> getEstoqueProduto(Categoria categoria){
+    public static ArrayList<Produto> getEstoqueProduto(Categoria categoria) throws IOException {
         ArrayList<Produto> produtosDaCategoria = new ArrayList<>();
 
-        for (Produto produto : this.estoqueProduto){
+        for (Produto produto : Produto.geraEstoqueProduto()){
             if (produto.getCategoria().equals(categoria))
                 produtosDaCategoria.add(produto);
         }
@@ -60,38 +59,43 @@ public class Produto {
     }
     public ArrayList<String> getCadastroProdutosVendidos(){return cadastroProdutosVendidos;}
 
-    public ArrayList<Produto> geraEstoqueProduto() throws IOException {
+    public static ArrayList<Produto> geraEstoqueProduto() throws IOException {
         ArrayList<Produto> produtos = new ArrayList<>();
-
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("estoqueProdutos"));
+            BufferedReader reader = new BufferedReader(new FileReader("estoqueProdutos.txt"));
             String linhaTxt;
+            String[] produtoNaLinha;
+            String categoria;
+
             while ((linhaTxt = reader.readLine()) != null){
-                String[] produtoNaLinha = linhaTxt.split(",");
-                String categoria = produtoNaLinha[3];
+                produtoNaLinha = linhaTxt.split(",");
+                 categoria = produtoNaLinha[3];
 
                 switch (categoria) {
                     case "roupa" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                            Short.parseShort(produtoNaLinha[2]), Categoria.ROUPA));
+                            Integer.parseInt(produtoNaLinha[2]), Categoria.ROUPA));
                     case "acessorio" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                            Short.parseShort(produtoNaLinha[2]), Categoria.ACESSORIO));
+                            Integer.parseInt(produtoNaLinha[2]), Categoria.ACESSORIO));
                     case "calcado" -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                            Short.parseShort(produtoNaLinha[2]), Categoria.CALCADO));
+                            Integer.parseInt(produtoNaLinha[2]), Categoria.CALCADO));
                     default -> produtos.add(new Produto(produtoNaLinha[0], Float.parseFloat(produtoNaLinha[1]),
-                            Short.parseShort(produtoNaLinha[2]), Categoria.EQUIPAMENTO));
+                            Integer.parseInt(produtoNaLinha[2]), Categoria.EQUIPAMENTO));
                 }
-                reader.close();
             }
+            reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return produtos;
     }
+    /*
     public void acrescentaEstoqueProduto(Produto produto, short acrescimo) throws IOException {
-        this.estoqueProduto.remove(produto);
-        this.estoqueProduto.add(new Produto(produto.getNome(),
+        produtos.remove(produto);
+        produtos.add(new Produto(produto.getNome(),
                 produto.getPreco(),
                 (short) (produto.getEstoque() + acrescimo),
                 produto.getCategoria()));
     }
+
+     */
 }

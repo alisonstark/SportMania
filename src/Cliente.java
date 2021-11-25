@@ -1,16 +1,20 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Cliente {
     String nome;
     String cpf;
     boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
+
+    static ArrayList<Cliente> clientela = new ArrayList<>();
     ArrayList<String> registroCompras;
 
-    public Cliente(String nome, String cpf, boolean ativo) {
+    public Cliente(String nome, String cpf, boolean ativo){
         this.nome = nome;
         this.cpf = cpf;
         this.ativo = ativo;
-        this.registroCompras = geraCadastroCliente(nome, cpf, true);
     }
     public String getNome() {
         return nome;
@@ -28,12 +32,22 @@ public class Cliente {
         this.ativo = atividade;
     }
 
-    public ArrayList<String> geraCadastroCliente(String nome, String cpf, boolean ativo){
-        // TODO escreve um txt para o cliente, contendo os dados de suas compras futuras
-        ArrayList<String> cabecalhoCadastroCliente = new ArrayList<>();
-        cabecalhoCadastroCliente.add(getNome() + " .......... " + getCpf() + " .......... ");
 
-        return cabecalhoCadastroCliente;
+    public static ArrayList<String> geraCadastroCliente(String nome, String cpf, boolean ativo) throws IOException {
+        // TODO escreve um txt para o cliente, contendo os dados de suas compras futuras
+        // Escrever num txt
+        ArrayList<String> cadastroClientes = new ArrayList<>();
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter("cadastroClientes", true));
+
+        // TODO faça aí, namoral (arquivo txt está sobrescrevendo ou só adicionando)
+        writer.write(nome + " " + cpf + " " + ativo + "\n");
+        cadastroClientes.add(nome + " " + cpf + " " + ativo);
+
+        clientela.add(new Cliente(nome, cpf, true));
+
+        writer.close();
+        return cadastroClientes;
     }
 
     public ArrayList<String> getRegistroCompras() {
