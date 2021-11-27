@@ -2,11 +2,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Loja {
-    public static void main(String[] args) throws IOException {
-        ArrayList<Produto> produtos = Produto.geraEstoqueProduto();
-        Cliente primeiroCliente =
-                new Cliente("Coisinha", "05899658431", true);
-        Vendas iniciarVenda = new Vendas();
+    public static void main(String[] args) {
+//        ArrayList<Produto> produtos = Produto.geraEstoqueProduto();
+//        Cliente primeiroCliente =
+//                new Cliente("Coisinha", "05899658431", true);
+//        Vendas iniciarVenda = new Vendas();
 
         /*
 
@@ -22,6 +22,6 @@ public class Loja {
          */
 //        Cliente.geraCadastroCliente("Gustavo", "05894555896", true);
 //        Cliente.geraCadastroCliente("Pedro", "05892255896", true);
-        System.out.println(Cliente.clientela);
+//        System.out.println(Cliente.clientela);
     }
 }

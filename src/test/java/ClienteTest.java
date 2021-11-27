@@ -1,4 +1,5 @@
 import Excecoes.CadastroException;
+import Cliente.*;
 import org.junit.jupiter.api.*;
 
 import java.util.Hashtable;
@@ -9,16 +10,16 @@ public class ClienteTest {
 
     @BeforeAll
     public static void gerarCadastroDeClientes() {
-        Cliente.setBancoDeDados("src/test/bancoTestes/clientela.ser");
+        Clientes.setBancoDeDados("src/test/bancoTestes/clientela.ser");
 
         try {
-            Cliente.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");
-            Cliente.cadastrarCliente("Clara Sandra Rodrigues", "53615621735");
-            Cliente.cadastrarCliente("Milena Stella Melo", "77796872526");
-            Cliente.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703");
-            Cliente.cadastrarCliente("Rosângela Ayla Galvão", "63608576002");
+            Clientes.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");
+            Clientes.cadastrarCliente("Clara Sandra Rodrigues", "53615621735");
+            Clientes.cadastrarCliente("Milena Stella Melo", "77796872526");
+            Clientes.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703");
+            Clientes.cadastrarCliente("Rosângela Ayla Galvão", "63608576002");
 
-            Cliente.atualizarClientela();
+            Clientes.atualizarClientela();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,17 +31,17 @@ public class ClienteTest {
         String nomeEsperado = "Cristiane Gabriela Almeida";
         String cpfEsperado = "45742554478";
 
-        assertDoesNotThrow(() -> Cliente.cadastrarCliente(nomeEsperado, cpfEsperado));
+        assertDoesNotThrow(() -> Clientes.cadastrarCliente(nomeEsperado, cpfEsperado));
 
-        assertTrue(Cliente.clientela.containsKey(cpfEsperado));
+        assertTrue(Clientes.clientela.containsKey(cpfEsperado));
 
-        Cliente cliente = Cliente.clientela.get(cpfEsperado);
+        Cliente cliente = Clientes.clientela.get(cpfEsperado);
 
         assertEquals(cliente.getNome(), nomeEsperado);
         assertEquals(cliente.getCpf(), cpfEsperado);
         assertTrue(cliente.isAtivo());
 
-        Cliente.clientela.remove(cpfEsperado);
+        Clientes.clientela.remove(cpfEsperado);
     }
 
     @Test
@@ -48,23 +49,23 @@ public class ClienteTest {
         String nome = "Joao";
         String cpf = "36033023978";
 
-        assertThrows(CadastroException.class, () -> Cliente.cadastrarCliente(nome, cpf));
+        assertThrows(CadastroException.class, () -> Clientes.cadastrarCliente(nome, cpf));
     }
 
     @Test
     public void carregarClientela_DeveCarregarTodosOsClientes() {
-        Hashtable<String, Cliente> copiaClientela = (Hashtable<String, Cliente>) Cliente.clientela.clone();
-        Cliente.limparClientela();
-        assertDoesNotThrow(Cliente::carregarClientela);
+        Hashtable<String, Cliente> copiaClientela = (Hashtable<String, Cliente>) Clientes.clientela.clone();
+        Clientes.limparClientela();
+        assertDoesNotThrow(Clientes::carregarClientela);
 
         for (String chave : copiaClientela.keySet()) {
-            assertTrue(Cliente.clientela.containsKey(chave));
-            assertEquals(Cliente.clientela.get(chave), copiaClientela.get(chave));
+            assertTrue(Clientes.clientela.containsKey(chave));
+            assertEquals(Clientes.clientela.get(chave), copiaClientela.get(chave));
         }
 
-        for (String chave : Cliente.clientela.keySet()) {
+        for (String chave : Clientes.clientela.keySet()) {
             assertTrue(copiaClientela.containsKey(chave));
-            assertEquals(copiaClientela.get(chave), Cliente.clientela.get(chave));
+            assertEquals(copiaClientela.get(chave), Clientes.clientela.get(chave));
         }
     }
 
@@ -73,21 +74,21 @@ public class ClienteTest {
         String nomeEsperado = "Cristiane Gabriela Almeida";
         String cpfEsperado = "45742554478";
 
-        assertDoesNotThrow(() -> Cliente.cadastrarCliente(nomeEsperado, cpfEsperado));
-        assertDoesNotThrow(Cliente::atualizarClientela);
+        assertDoesNotThrow(() -> Clientes.cadastrarCliente(nomeEsperado, cpfEsperado));
+        assertDoesNotThrow(Clientes::atualizarClientela);
 
-        Hashtable<String, Cliente> copiaClientela = (Hashtable<String, Cliente>) Cliente.clientela.clone();
-        Cliente.limparClientela();
-        assertDoesNotThrow(Cliente::carregarClientela);
+        Hashtable<String, Cliente> copiaClientela = (Hashtable<String, Cliente>) Clientes.clientela.clone();
+        Clientes.limparClientela();
+        assertDoesNotThrow(Clientes::carregarClientela);
 
         for (String chave : copiaClientela.keySet()) {
-            assertTrue(Cliente.clientela.containsKey(chave));
-            assertEquals(Cliente.clientela.get(chave), copiaClientela.get(chave));
+            assertTrue(Clientes.clientela.containsKey(chave));
+            assertEquals(Clientes.clientela.get(chave), copiaClientela.get(chave));
         }
 
-        for (String chave : Cliente.clientela.keySet()) {
+        for (String chave : Clientes.clientela.keySet()) {
             assertTrue(copiaClientela.containsKey(chave));
-            assertEquals(copiaClientela.get(chave), Cliente.clientela.get(chave));
+            assertEquals(copiaClientela.get(chave), Clientes.clientela.get(chave));
         }
     }
 }

@@ -1,50 +1,15 @@
+package Cliente;
+
 import Excecoes.CadastroException;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class Cliente implements Serializable {
-    private String nome;
-    private final String cpf;
-    private boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
-    // TODO implementar o registro de compras
-    private ArrayList<String> registroCompras;
+public class Clientes {
 
-    private static String bancoDeDados = "/BancoDeDados/clientela.ser";
+    private static String bancoDeDados = "/BancoDeDados/clientes.ser";
     public static Hashtable<String, Cliente> clientela = new Hashtable<>();
 
-    public Cliente(String nome, String cpf, boolean ativo) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.ativo = ativo;
-        // TODO implementar o registro de compras
-        this.registroCompras = new ArrayList<String>();
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtividade(boolean atividade) {
-        this.ativo = atividade;
-    }
-
-    public ArrayList<String> getRegistroCompras() {
-        return registroCompras;
-    }
     public static void setBancoDeDados(String caminho) {
         bancoDeDados = caminho;
     }
@@ -61,9 +26,8 @@ public class Cliente implements Serializable {
      */
     public static void carregarClientela() throws IOException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
-        ObjectInputStream ois = new ObjectInputStream(fis);
 
-        try {
+        try (ObjectInputStream ois = new ObjectInputStream(fis)) {
             while (fis.available() > 0) {
                 Cliente cliente = (Cliente) ois.readObject();
                 clientela.put(cliente.getCpf(), cliente);
@@ -71,8 +35,6 @@ public class Cliente implements Serializable {
         } catch (ClassNotFoundException e) {
             // TODO Definir o que deve ser feito se ocorrer erro
             e.printStackTrace();
-        } finally {
-            ois.close();
         }
     }
 
@@ -104,30 +66,6 @@ public class Cliente implements Serializable {
             throw new CadastroException("Cpf ja cadastrado");
         }
         clientela.put(cpf, cliente);
-    }
-
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", ativo=" + ativo +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object outro) {
-        if (this == outro) {
-            return true;
-        }
-        if (outro == null || getClass() != outro.getClass()) {
-            return false;
-        }
-        Cliente cliente = (Cliente) outro;
-        return ativo == cliente.ativo &&
-                nome.equals(cliente.nome) &&
-                cpf.equals(cliente.cpf) &&
-                registroCompras.equals(cliente.getRegistroCompras());
     }
 
 }
