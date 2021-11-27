@@ -20,8 +20,8 @@ public class Loja {
         }
 
          */
-        Cliente.geraCadastroCliente("Gustavo", "05894555896", true);
-        Cliente.geraCadastroCliente("Pedro", "05892255896", true);
+//        Cliente.geraCadastroCliente("Gustavo", "05894555896", true);
+//        Cliente.geraCadastroCliente("Pedro", "05892255896", true);
         System.out.println(Cliente.clientela);
     }
 }
