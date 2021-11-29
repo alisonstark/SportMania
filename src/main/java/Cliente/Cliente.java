@@ -1,23 +1,19 @@
 package Cliente;
 
-import Excecoes.CadastroException;
-
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 public class Cliente implements Serializable {
     private String nome;
     private final String cpf;
     private boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
-    // TODO implementar o registro de compras
-    private ArrayList<String> registroCompras;
+    // TODO melhorar o registro de compras
+    private ArrayList<String> registroCompras; // data da compra + ... + id/nome
 
     public Cliente(String nome, String cpf, boolean ativo) {
         this.nome = nome;
         this.cpf = cpf;
         this.ativo = ativo;
-        // TODO implementar o registro de compras
         this.registroCompras = new ArrayList<>();
     }
 

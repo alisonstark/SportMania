@@ -33,7 +33,7 @@ public class Clientes {
                 clientela.put(cliente.getCpf(), cliente);
             }
         } catch (ClassNotFoundException e) {
-            // TODO Definir o que deve ser feito se ocorrer erro
+            // TODO exibir msg de erro
             e.printStackTrace();
         }
     }

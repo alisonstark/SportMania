@@ -10,7 +10,7 @@ public class Produto {
     private int estoque;
     private boolean emEstoque;
     private final Categoria categoria;
-
+    // TODO adicionar atributo ativo (exclusão do estoque / temporariamente zerado no estoque)
     protected ArrayList<String> cadastroProdutosVendidos;         // String: data, produto, quant, valor, cliente
 
     public Produto(String nome, float preco, int estoque, Categoria categoria) {

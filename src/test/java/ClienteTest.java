@@ -1,5 +1,6 @@
+import Cliente.Cliente;
+import Cliente.Clientes;
 import Excecoes.CadastroException;
-import Cliente.*;
 import org.junit.jupiter.api.*;
 
 import java.util.Hashtable;

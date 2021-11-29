@@ -35,14 +35,15 @@ public class Produtos {
         oos.close();
     }
 
-    // TODO definir como adicionar produto
-    public static void adicionarProduto(/* TODO definir parâmetro */) {
+    // produto que não existe no cadastro de produtos (no estoque)
+    public static void adicionarProduto(/* TODO ALISON criar produto */) {
 
     }
 
-    // TODO definir como retirar produto
-    public static void retirarProduto(/* TODO definir parâmetro */) {
+    public static void atualizarProduto(/*TODO FELIPE atualizar estoque usando hashtable  */){}
 
+    // TODO a pensar se vamos precisar...
+    public static void retirarProduto(/* TODO definir parâmetro */) {
     }
 
 }
