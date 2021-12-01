@@ -55,17 +55,6 @@ public class Estoque {
 
     }
 
-    public void atualizarProduto(Integer id, int quantidade) throws ProdutoException {
-        if (!contemProduto(id)) {
-            throw new ProdutoInexistenteException(id);
-        }
-        Produto produto = procurarProduto(id);
-        if (produto.podeVender(quantidade)) {
-            throw new EstoqueInsuficienteException(id);
-        }
-        produto.retirarN(quantidade);
-    }
-
     // TODO a pensar se vamos precisar...
     public void retirarProduto(/* TODO definir parâmetro */) {
     }
