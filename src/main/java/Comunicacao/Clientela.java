@@ -1,21 +1,48 @@
-package Cliente;
+package Comunicacao;
 
+import Cliente.Cliente;
 import Excecoes.CadastroException;
 
 import java.io.*;
 import java.util.Hashtable;
+import java.util.Set;
 
-public class Clientes {
+public class Clientela {
 
-    private static String bancoDeDados = "/BancoDeDados/clientes.ser";
-    public static Hashtable<String, Cliente> clientela = new Hashtable<>();
+    private String bancoDeDados;
+    private final Hashtable<String, Cliente> clientela;
 
-    public static void setBancoDeDados(String caminho) {
+    public Clientela(String caminho) {
+        this.bancoDeDados = caminho;
+        this.clientela = new Hashtable<>();
+    }
+
+    public void setBancoDeDados(String caminho) {
         bancoDeDados = caminho;
     }
 
-    public static void limparClientela() {
+    public void limparClientela() {
         clientela.clear();
+    }
+
+    public boolean contemCliente(String cpf) {
+        return clientela.containsKey(cpf);
+    }
+
+    public Cliente procurarCliente(String cpf) {
+        return clientela.get(cpf);
+    }
+
+    public void removerCliente(String cpf) {
+        clientela.remove(cpf);
+    }
+
+    public Set<String> retornarCpfsCadastrados() {
+        return clientela.keySet();
+    }
+
+    public Hashtable<String, Cliente> clonarClientela() {
+        return (Hashtable<String, Cliente>) clientela.clone();
     }
 
     /**
@@ -24,7 +51,7 @@ public class Clientes {
      *
      * @throws IOException Caso ocorra erro na leitura do arquivo
      */
-    public static void carregarClientela() throws IOException {
+    public void carregarClientela() throws IOException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
 
         try (ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -43,7 +70,7 @@ public class Clientes {
      *
      * @throws IOException Se ocorrer erro na escrita do arquivo
      */
-    public static void atualizarClientela() throws IOException {
+    public void atualizarClientela() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
@@ -60,9 +87,9 @@ public class Clientes {
      * @param cpf Cpf do cliente
      * @throws CadastroException Se o cpf já estiver cadastrado
      */
-    public static void cadastrarCliente(String nome, String cpf) throws CadastroException {
+    public void cadastrarCliente(String nome, String cpf) throws CadastroException {
         Cliente cliente = new Cliente(nome, cpf, true);
-        if (clientela.containsKey(cpf)) {
+        if (contemCliente(cpf)) {
             throw new CadastroException("Cpf ja cadastrado");
         }
         clientela.put(cpf, cliente);

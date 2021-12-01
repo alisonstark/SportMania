@@ -60,6 +60,14 @@ public class Produto {
         this.emEstoque = emEstoque;
     }
 
+    public boolean podeVender(int quantidade) {
+        return estoque >= quantidade;
+    }
+
+    public void retirarN(int quantidade) {
+        estoque -= quantidade;
+    }
+
     public ArrayList<String> getCadastroProdutosVendidos() {
         return cadastroProdutosVendidos;
     }
