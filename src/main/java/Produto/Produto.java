@@ -72,7 +72,6 @@ public class Produto {
     public ArrayList<String> getCadastroProdutosVendidos() {
         return cadastroProdutosVendidos;
     }
-
     public static Categoria identificaCategoriaProduto(String categoria){
         return switch (categoria) {
             case "roupa" -> Categoria.ROUPA;

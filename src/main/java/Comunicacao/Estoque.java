@@ -2,6 +2,7 @@ package Comunicacao;
 
 import Excecoes.Produto.*;
 import Produto.Produto;
+import Produto.Categoria;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -51,10 +52,17 @@ public class Estoque {
     }
 
     // produto que não existe no cadastro de produtos (no estoque)
-    public void adicionarProduto(/* TODO ALISON criar produto */) {
+    public void adicionarProduto(String nome, float preco, int estoque, String categoria) throws ProdutoJaExistenteException {
+        Integer id = hashCode();
+        if (contemProduto(id)) {
+            throw new ProdutoJaExistenteException(id);
+        } else {
+            Categoria categoriaProduto = Produto.identificaCategoriaProduto(categoria);
+            Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
 
+            this.estoque.put(id, produto);
+        }
     }
-
     // TODO a pensar se vamos precisar...
     public void retirarProduto(/* TODO definir parâmetro */) {
     }
