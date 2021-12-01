@@ -2,6 +2,7 @@ package Comunicacao;
 
 import Excecoes.Produto.*;
 import Produto.Produto;
+import Produto.Categoria;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -27,7 +28,7 @@ public class Estoque {
         return estoque.get(id);
     }
 
-    public void carregarProdutos() throws FileNotFoundException {
+    public void carregaProdutos() throws FileNotFoundException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
 
         try (ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -40,7 +41,7 @@ public class Estoque {
         }
     }
 
-    public void atualizarProdutos() throws IOException {
+    public void atualizaProdutos() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
@@ -51,11 +52,20 @@ public class Estoque {
     }
 
     // produto que não existe no cadastro de produtos (no estoque)
-    public void adicionarProduto(/* TODO ALISON criar produto */) {
+    /* TODO checar implementação */
+    public void adicionaProduto(String nome, float preco, int estoque, String categoria) throws ProdutoJaExistenteException {
+        Integer id = hashCode();
+        if (contemProduto(id)) {
+            throw new ProdutoJaExistenteException(id);
+        } else {
+            Categoria categoriaProduto = Produto.identificaCategoriaProduto(categoria);
+            Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
 
+            this.estoque.put(id, produto);
+        }
     }
 
-    public void atualizarProduto(Integer id, int quantidade) throws ProdutoException {
+    public void atualizaProduto(Integer id, int quantidade) throws ProdutoException {
         if (!contemProduto(id)) {
             throw new ProdutoInexistenteException(id);
         }
@@ -67,8 +77,10 @@ public class Estoque {
     }
 
     // TODO a pensar se vamos precisar...
-    public void retirarProduto(/* TODO definir parâmetro */) {
+    public void retiraProduto(Integer id) throws ProdutoInexistenteException {
+        if (!contemProduto(id)) {
+            throw new ProdutoInexistenteException(id);
+        } else
+            this.estoque.remove(id); //TODO checar se remove
     }
-
-
 }
