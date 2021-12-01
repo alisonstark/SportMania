@@ -1,5 +1,7 @@
 package Produto;
 
+import Excecoes.Produto.EstoqueInsuficienteException;
+
 import java.util.ArrayList;
 
 public class Produto {
@@ -60,11 +62,10 @@ public class Produto {
         this.emEstoque = emEstoque;
     }
 
-    public boolean podeVender(int quantidade) {
-        return estoque >= quantidade;
-    }
-
-    public void retirarN(int quantidade) {
+    public void retirarN(int quantidade) throws EstoqueInsuficienteException {
+        if (estoque < quantidade) {
+            throw new EstoqueInsuficienteException(id);
+        }
         estoque -= quantidade;
     }
 

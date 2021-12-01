@@ -1,5 +1,7 @@
 package Cliente;
 
+import Venda.Venda;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -7,14 +9,11 @@ public class Cliente implements Serializable {
     private String nome;
     private final String cpf;
     private boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
-    // TODO melhorar o registro de compras
-    private ArrayList<String> registroCompras; // data da compra + ... + id/nome
 
     public Cliente(String nome, String cpf, boolean ativo) {
         this.nome = nome;
         this.cpf = cpf;
         this.ativo = ativo;
-        this.registroCompras = new ArrayList<>();
     }
 
     public String getNome() {
@@ -37,10 +36,6 @@ public class Cliente implements Serializable {
         this.ativo = atividade;
     }
 
-    public ArrayList<String> getRegistroCompras() {
-        return registroCompras;
-    }
-
     @Override
     public String toString() {
         return "Cliente{" +
@@ -59,10 +54,7 @@ public class Cliente implements Serializable {
             return false;
         }
         Cliente cliente = (Cliente) outro;
-        return ativo == cliente.ativo &&
-                nome.equals(cliente.nome) &&
-                cpf.equals(cliente.cpf) &&
-                registroCompras.equals(cliente.getRegistroCompras());
+        return cpf.equals(cliente.cpf);
     }
 
 }

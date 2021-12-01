@@ -1,7 +1,7 @@
 package Comunicacao;
 
 import Cliente.Cliente;
-import Excecoes.CadastroException;
+import Excecoes.Cliente.*;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -29,7 +29,10 @@ public class Clientela {
         return clientela.containsKey(cpf);
     }
 
-    public Cliente procurarCliente(String cpf) {
+    public Cliente procurarCliente(String cpf) throws CpfNaoCadastradoException {
+        if (!contemCliente(cpf)) {
+            throw new CpfNaoCadastradoException(cpf);
+        }
         return clientela.get(cpf);
     }
 
@@ -85,12 +88,12 @@ public class Clientela {
      *
      * @param nome Nome do cliente
      * @param cpf Cpf do cliente
-     * @throws CadastroException Se o cpf já estiver cadastrado
+     * @throws CpfJaCadastradoException Se o cpf já estiver cadastrado
      */
-    public void cadastrarCliente(String nome, String cpf) throws CadastroException {
+    public void cadastrarCliente(String nome, String cpf) throws CpfJaCadastradoException {
         Cliente cliente = new Cliente(nome, cpf, true);
         if (contemCliente(cpf)) {
-            throw new CadastroException("Cpf ja cadastrado");
+            throw new CpfJaCadastradoException(cpf);
         }
         clientela.put(cpf, cliente);
     }
