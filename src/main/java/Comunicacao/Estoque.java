@@ -23,10 +23,7 @@ public class Estoque {
         return estoque.containsKey(id);
     }
 
-    public Produto procurarProduto(Integer id) throws ProdutoInexistenteException {
-        if (!contemProduto(id)) {
-            throw new ProdutoInexistenteException(id);
-        }
+    public Produto procurarProduto(Integer id) {
         return estoque.get(id);
     }
 
@@ -56,6 +53,17 @@ public class Estoque {
     // produto que não existe no cadastro de produtos (no estoque)
     public void adicionarProduto(/* TODO ALISON criar produto */) {
 
+    }
+
+    public void atualizarProduto(Integer id, int quantidade) throws ProdutoException {
+        if (!contemProduto(id)) {
+            throw new ProdutoInexistenteException(id);
+        }
+        Produto produto = procurarProduto(id);
+        if (produto.podeVender(quantidade)) {
+            throw new EstoqueInsuficienteException(id);
+        }
+        produto.retirarN(quantidade);
     }
 
     // TODO a pensar se vamos precisar...

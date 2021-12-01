@@ -73,4 +73,12 @@ public class Produto {
         return cadastroProdutosVendidos;
     }
 
+    public static Categoria identificaCategoriaProduto(String categoria){
+        return switch (categoria) {
+            case "roupa" -> Categoria.ROUPA;
+            case "calcado" -> Categoria.CALCADO;
+            case "acessorio" -> Categoria.ACESSORIO;
+            default -> Categoria.EQUIPAMENTO;
+        };
+    }
 }
