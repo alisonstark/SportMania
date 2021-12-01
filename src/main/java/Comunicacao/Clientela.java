@@ -63,7 +63,7 @@ public class Clientela {
                 clientela.put(cliente.getCpf(), cliente);
             }
         } catch (ClassNotFoundException e) {
-            // TODO exibir msg de erro
+            // TODO exibir msg de erro para o vendedor
             e.printStackTrace();
         }
     }

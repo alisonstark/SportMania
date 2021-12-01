@@ -64,8 +64,10 @@ public class Estoque {
         }
     }
     // TODO a pensar se vamos precisar...
-    public void retirarProduto(/* TODO definir parâmetro */) {
+    public void retirarProduto(Integer id) throws ProdutoInexistenteException{
+        if (!contemProduto(id)) {
+            throw new ProdutoInexistenteException(id);
+        } else
+            this.estoque.remove(id);
     }
-
-
 }
