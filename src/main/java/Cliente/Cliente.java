@@ -9,6 +9,7 @@ public class Cliente implements Serializable {
     private String nome;
     private final String cpf;
     private boolean ativo;  // true se o cliente estiver ativo (para listagem no cadastro de clientes)
+    //TODO criar uma ID pra o cliente através de uma entidade da qual cliente e produto herdam
 
     public Cliente(String nome, String cpf, boolean ativo) {
         this.nome = nome;

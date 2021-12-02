@@ -54,5 +54,4 @@ public class Vendas {
         Venda venda = new Venda(cliente, produto, quantidade);
         registrarVenda(venda);
     }
-
 }
