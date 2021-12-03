@@ -1,9 +1,7 @@
 package Comunicacao;
 
 import Cliente.Cliente;
-import Excecoes.Cliente.ClienteException;
-import Excecoes.Cliente.CpfNaoCadastradoException;
-import Excecoes.Produto.*;
+import Excecoes.TabelaException;
 import Produto.Produto;
 import Venda.Venda;
 
@@ -30,6 +28,27 @@ public class Vendas {
         this.bancoDeDados = caminho;
     }
 
+    public void carregarRegistorDeVendas() {
+        // TODO Implementar
+    }
+
+    public void processarVenda(Integer id, int quantidade) throws TabelaException, IOException {
+        Produto produto = estoque.procurarProduto(id);
+        produto.retirarN(quantidade);
+
+        Venda venda = new Venda(produto, quantidade);
+        registrarVenda(venda);
+    }
+
+    public void processarVenda(String cpf, Integer id, int quantidade) throws TabelaException, IOException {
+        Cliente cliente = clientela.procurar(cpf);
+        Produto produto = estoque.procurarProduto(id);
+        produto.retirarN(quantidade);
+
+        Venda venda = new Venda(cliente, produto, quantidade);
+        registrarVenda(venda);
+    }
+
     private void registrarVenda(Venda venda) throws IOException {
         FileWriter fw = new FileWriter(bancoDeDados, true);
         BufferedWriter bw = new BufferedWriter(fw);
@@ -38,20 +57,4 @@ public class Vendas {
         bw.close();
     }
 
-    public void processarVenda(Integer id, int quantidade) throws ProdutoException, IOException {
-        Produto produto = estoque.procurarProduto(id);
-        produto.retirarN(quantidade);
-
-        Venda venda = new Venda(produto, quantidade);
-        registrarVenda(venda);
-    }
-
-    public void processarVenda(String cpf, Integer id, int quantidade) throws ClienteException, ProdutoException, IOException {
-        Cliente cliente = clientela.procurarCliente(cpf);
-        Produto produto = estoque.procurarProduto(id);
-        produto.retirarN(quantidade);
-
-        Venda venda = new Venda(cliente, produto, quantidade);
-        registrarVenda(venda);
-    }
 }

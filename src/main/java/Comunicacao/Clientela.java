@@ -2,50 +2,20 @@ package Comunicacao;
 
 import Cliente.Cliente;
 import Excecoes.Cliente.*;
+import Excecoes.TabelaException;
 
 import java.io.*;
-import java.util.Hashtable;
-import java.util.Set;
 
-public class Clientela {
+public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjetos {
 
     private String bancoDeDados;
-    private final Hashtable<String, Cliente> clientela;
 
     public Clientela(String caminho) {
         this.bancoDeDados = caminho;
-        this.clientela = new Hashtable<>();
     }
 
     public void setBancoDeDados(String caminho) {
         bancoDeDados = caminho;
-    }
-
-    public void limparClientela() {
-        clientela.clear();
-    }
-
-    public boolean contemCliente(String cpf) {
-        return clientela.containsKey(cpf);
-    }
-
-    public Cliente procurarCliente(String cpf) throws CpfNaoCadastradoException {
-        if (!contemCliente(cpf)) {
-            throw new CpfNaoCadastradoException(cpf);
-        }
-        return clientela.get(cpf);
-    }
-
-    public void removerCliente(String cpf) {
-        clientela.remove(cpf);
-    }
-
-    public Set<String> retornarCpfsCadastrados() {
-        return clientela.keySet();
-    }
-
-    public Hashtable<String, Cliente> clonarClientela() {
-        return (Hashtable<String, Cliente>) clientela.clone();
     }
 
     /**
@@ -53,19 +23,18 @@ public class Clientela {
      * {@code Hashtable}, em que a chave eh o cpf do cliente.
      *
      * @throws IOException Caso ocorra erro na leitura do arquivo
+     * @throws ClassNotFoundException
+     * @throws TabelaException
      */
-    public void carregarClientela() throws IOException {
+    public void carregarObjetos() throws IOException, ClassNotFoundException, TabelaException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
+        ObjectInputStream ois = new ObjectInputStream(fis);
 
-        try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-            while (fis.available() > 0) {
-                Cliente cliente = (Cliente) ois.readObject();
-                clientela.put(cliente.getCpf(), cliente);
-            }
-        } catch (ClassNotFoundException e) {
-            // TODO exibir msg de erro para o vendedor
-            e.printStackTrace();
+        while (fis.available() > 0) {
+            Cliente cliente = (Cliente) ois.readObject();
+            adicionar(cliente);
         }
+        ois.close();
     }
 
     /**
@@ -73,11 +42,11 @@ public class Clientela {
      *
      * @throws IOException Se ocorrer erro na escrita do arquivo
      */
-    public void atualizarClientela() throws IOException {
+    public void atualizarObjetos() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-        for (Cliente cliente : clientela.values()) {
+        for (Cliente cliente : retornarValores()) {
             oos.writeObject(cliente);
         }
         oos.close();
@@ -90,12 +59,33 @@ public class Clientela {
      * @param cpf Cpf do cliente
      * @throws CpfJaCadastradoException Se o cpf já estiver cadastrado
      */
-    public void cadastrarCliente(String nome, String cpf) throws CpfJaCadastradoException {
+    public void cadastrarCliente(String nome, String cpf) throws TabelaException {
         Cliente cliente = new Cliente(nome, cpf, true);
-        if (contemCliente(cpf)) {
+        if (contem(cpf)) {
             throw new CpfJaCadastradoException(cpf);
         }
-        clientela.put(cpf, cliente);
+        adicionar(cliente);
     }
 
+    @Override
+    protected void adicionar(Cliente cliente) throws TabelaException {
+        String cpf = cliente.getCpf();
+        if (contem(cpf))
+            throw new CpfJaCadastradoException(cpf);
+        tabela.put(cpf, cliente);
+    }
+
+    @Override
+    public void remover(String cpf) throws TabelaException {
+        if (!contem(cpf))
+            throw new CpfNaoCadastradoException(cpf);
+        tabela.remove(cpf);
+    }
+
+    @Override
+    public Cliente procurar(String cpf) throws TabelaException {
+        if (!contem(cpf))
+            throw new CpfNaoCadastradoException(cpf);
+        return super.procurar(cpf);
+    }
 }

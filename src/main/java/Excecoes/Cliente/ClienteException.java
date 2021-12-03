@@ -1,7 +1,9 @@
 package Excecoes.Cliente;
 
 
-public class ClienteException extends Exception {
+import Excecoes.TabelaException;
+
+public abstract class ClienteException extends TabelaException {
 
     public ClienteException(String msg) {
         // TODO melhorar mensagem de erro

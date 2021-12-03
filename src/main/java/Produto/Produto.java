@@ -8,10 +8,10 @@ public class Produto {
 
     private final Integer id;
     private final String nome;
+    private final Categoria categoria;
     private float preco;
     private int estoque;
     private boolean emEstoque;
-    private final Categoria categoria;
     protected ArrayList<String> cadastroProdutosVendidos;
 
     public Produto(String nome, float preco, int estoque, Categoria categoria) {
@@ -70,13 +70,5 @@ public class Produto {
 
     public ArrayList<String> getCadastroProdutosVendidos() {
         return cadastroProdutosVendidos;
-    }
-    public static Categoria identificaCategoriaProduto(String categoria){
-        return switch (categoria) {
-            case "roupa" -> Categoria.ROUPA;
-            case "calcado" -> Categoria.CALCADO;
-            case "acessorio" -> Categoria.ACESSORIO;
-            default -> Categoria.EQUIPAMENTO;
-        };
     }
 }

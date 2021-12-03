@@ -9,7 +9,7 @@ import java.util.Hashtable;
 
 public class Estoque {
     private String bancoDeDados;
-    public Hashtable<Integer, Produto> estoque;
+    private final Hashtable<Integer, Produto> estoque;
 
     public Estoque(String caminho) {
         this.bancoDeDados = caminho;
@@ -28,46 +28,44 @@ public class Estoque {
         return estoque.get(id);
     }
 
-    public void carregarProdutos() throws FileNotFoundException {
+    public void carregarProdutos() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
+        ObjectInputStream ois = new ObjectInputStream(fis);
 
-        try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-            while (fis.available() > 0) {
-                Produto produto = (Produto) ois.readObject();
-                estoque.put(produto.getId(), produto);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (fis.available() > 0) {
+            Produto produto = (Produto) ois.readObject();
+            estoque.put(produto.getId(), produto);
         }
+        ois.close();
     }
 
     public void atualizarProdutos() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-        for (Produto produto : estoque.values()) {
+        for (Produto produto : estoque.values())
             oos.writeObject(produto);
-        }
         oos.close();
     }
 
     // produto que não existe no cadastro de produtos (no estoque)
     public void adicionarProduto(String nome, float preco, int estoque, String categoria) throws ProdutoJaExistenteException {
-        Integer id = hashCode();
-        if (contemProduto(id)) {
-            throw new ProdutoJaExistenteException(id);
-        } else {
-            Categoria categoriaProduto = Produto.identificaCategoriaProduto(categoria);
-            Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
+        Categoria categoriaProduto = Categoria.mapearString(categoria);
+        Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
+        Integer id = produto.getId();
 
+        if (contemProduto(id))
+            throw new ProdutoJaExistenteException(id);
+        else
             this.estoque.put(id, produto);
-        }
     }
+
     // TODO a pensar se vamos precisar...
     public void retirarProduto(Integer id) throws ProdutoInexistenteException{
-        if (!contemProduto(id)) {
+        if (!contemProduto(id))
             throw new ProdutoInexistenteException(id);
-        } else
+        else
             this.estoque.remove(id);
     }
+
 }
