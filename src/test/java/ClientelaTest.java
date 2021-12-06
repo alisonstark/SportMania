@@ -1,6 +1,6 @@
 import Cliente.Cliente;
 import Comunicacao.Clientela;
-import Excecoes.Cliente.*;
+import Excecoes.Clientela.*;
 import org.junit.jupiter.api.*;
 
 import java.util.Hashtable;
@@ -38,12 +38,13 @@ public class ClientelaTest {
 
         assertTrue(clientela.contem(cpfEsperado));
 
-        final Cliente[] cliente = new Cliente[1];
-        assertDoesNotThrow(() -> cliente[0] = clientela.procurar(cpfEsperado));
+        final Cliente[] clientes = new Cliente[1];
+        assertDoesNotThrow(() -> clientes[0] = clientela.procurar(cpfEsperado));
+        Cliente cliente = clientes[0];
 
-        assertEquals(cliente[0].getNome(), nomeEsperado);
-        assertEquals(cliente[0].getCpf(), cpfEsperado);
-        assertTrue(cliente[0].isAtivo());
+        assertEquals(cliente.getNome(), nomeEsperado);
+        assertEquals(cliente.getCpf(), cpfEsperado);
+        assertTrue(cliente.isAtivo());
 
         assertDoesNotThrow(() -> clientela.remover(cpfEsperado));
     }
@@ -57,48 +58,48 @@ public class ClientelaTest {
     }
 
     @Test
-    public void carregarClientela_DeveCarregarTodosOsClientes() {
-        Hashtable<String, Cliente> copiaClientela = clientela.clonar();
+    public void carregarObjetos_DeveCarregarTodosOsClientes() {
+        Hashtable<String, Cliente> copia = clientela.clonar();
         clientela.limpar();
         assertDoesNotThrow(() -> clientela.carregarObjetos());
 
-        final Cliente[] cliente = new Cliente[1];
-        for (String chave : copiaClientela.keySet()) {
+        final Cliente[] clientes = new Cliente[1];
+        for (String chave : copia.keySet()) {
             assertTrue(clientela.contem(chave));
-            assertDoesNotThrow(() -> cliente[0] = clientela.procurar(chave));
-            assertEquals(cliente[0], copiaClientela.get(chave));
+            assertDoesNotThrow(() -> clientes[0] = clientela.procurar(chave));
+            assertEquals(clientes[0], copia.get(chave));
         }
 
         for (String chave : clientela.retornarChaves()) {
-            assertTrue(copiaClientela.containsKey(chave));
-            assertDoesNotThrow(() -> cliente[0] = clientela.procurar(chave));
-            assertEquals(copiaClientela.get(chave), cliente[0]);
+            assertTrue(copia.containsKey(chave));
+            assertDoesNotThrow(() -> clientes[0] = clientela.procurar(chave));
+            assertEquals(copia.get(chave), clientes[0]);
         }
     }
 
     @Test
-    public void atualizarClientela_DeveAtualizarOBancoDeDados() {
+    public void atualizarObjetos_DeveAtualizarOBancoDeDados() {
         String nomeEsperado = "Cristiane Gabriela Almeida";
         String cpfEsperado = "45742554478";
 
         assertDoesNotThrow(() -> clientela.cadastrarCliente(nomeEsperado, cpfEsperado));
         assertDoesNotThrow(clientela::atualizarObjetos);
 
-        Hashtable<String, Cliente> copiaClientela = clientela.clonar();
+        Hashtable<String, Cliente> copia = clientela.clonar();
         clientela.limpar();
         assertDoesNotThrow(() -> clientela.carregarObjetos());
 
         final Cliente[] cliente = new Cliente[1];
-        for (String chave : copiaClientela.keySet()) {
+        for (String chave : copia.keySet()) {
             assertTrue(clientela.contem(chave));
             assertDoesNotThrow(() -> cliente[0] = clientela.procurar(chave));
-            assertEquals(cliente[0], copiaClientela.get(chave));
+            assertEquals(cliente[0], copia.get(chave));
         }
 
         for (String chave : clientela.retornarChaves()) {
-            assertTrue(copiaClientela.containsKey(chave));
+            assertTrue(copia.containsKey(chave));
             assertDoesNotThrow(() -> cliente[0] = clientela.procurar(chave));
-            assertEquals(copiaClientela.get(chave), cliente[0]);
+            assertEquals(copia.get(chave), cliente[0]);
         }
     }
 }
