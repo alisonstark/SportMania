@@ -27,17 +27,17 @@ public class Vendas implements ArmazenaTexto {
         this.bancoDeDados = caminho;
     }
 
-    public void processarVenda(Integer id, int quantidade) throws TabelaException, IOException {
-        Produto produto = estoque.procurar(id);
+    public void processarVenda(String identificador, int quantidade) throws TabelaException, IOException {
+        Produto produto = estoque.procurar(identificador);
         produto.retirarN(quantidade);
 
         Venda venda = new Venda(produto, quantidade);
         registrarVenda(venda);
     }
 
-    public void processarVenda(String cpf, Integer id, int quantidade) throws TabelaException, IOException {
+    public void processarVenda(String cpf, String identificador, int quantidade) throws TabelaException, IOException {
         Cliente cliente = clientela.procurar(cpf);
-        Produto produto = estoque.procurar(id);
+        Produto produto = estoque.procurar(identificador);
         produto.retirarN(quantidade);
 
         Venda venda = new Venda(cliente, produto, quantidade);
@@ -55,7 +55,7 @@ public class Vendas implements ArmazenaTexto {
     public Venda fromString(String venda) throws TabelaException {
         String[] infos = venda.split(String.valueOf(Venda.separador));
         String dataHorario = infos[0];
-        Produto produto = estoque.procurar(Integer.parseInt(infos[1]));
+        Produto produto = estoque.procurar(infos[1]);
         int quantidade = Integer.parseInt(infos[2]);
         Cliente cliente = null;
         if (!infos[3].equals(Venda.clienteNulo))

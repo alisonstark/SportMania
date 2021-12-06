@@ -1,12 +1,16 @@
 package Produto;
 
-import Excecoes.Produto.EstoqueInsuficienteException;
+import Excecoes.Estoque.EstoqueInsuficienteException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class Produto {
+public class Produto implements Serializable {
 
-    private final Integer id;
+    public static String separador = "::";
+
+    private final String identificador;
     private final String nome;
     private final Categoria categoria;
     private float preco;
@@ -15,7 +19,7 @@ public class Produto {
     protected ArrayList<String> cadastroProdutosVendidos;
 
     public Produto(String nome, float preco, int estoque, Categoria categoria) {
-        this.id = hashCode();
+        this.identificador = categoria + "::" + nome;
         this.nome = nome;
         this.preco = preco;
         this.estoque = Math.max(estoque, 0);
@@ -25,8 +29,8 @@ public class Produto {
         this.cadastroProdutosVendidos = new ArrayList<>();
     }
 
-    public Integer getId() {
-        return id;
+    public String getIdentificador() {
+        return identificador;
     }
 
     public String getNome() {
@@ -63,7 +67,7 @@ public class Produto {
 
     public void retirarN(int quantidade) throws EstoqueInsuficienteException {
         if (estoque < quantidade) {
-            throw new EstoqueInsuficienteException(id);
+            throw new EstoqueInsuficienteException(identificador);
         }
         estoque -= quantidade;
     }
@@ -71,4 +75,15 @@ public class Produto {
     public ArrayList<String> getCadastroProdutosVendidos() {
         return cadastroProdutosVendidos;
     }
+
+    @Override
+    public boolean equals(Object outro) {
+        if (this == outro)
+            return true;
+        if (outro == null || getClass() != outro.getClass())
+            return false;
+        Produto produto = (Produto) outro;
+        return Objects.equals(identificador, produto.identificador);
+    }
+
 }

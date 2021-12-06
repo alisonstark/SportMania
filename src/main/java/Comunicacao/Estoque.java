@@ -1,12 +1,12 @@
 package Comunicacao;
 
-import Excecoes.Produto.*;
+import Excecoes.Estoque.*;
 import Excecoes.TabelaException;
 import Produto.*;
 
 import java.io.*;
 
-public class Estoque extends Tabela<Integer, Produto> implements ArmazenaObjetos {
+public class Estoque extends Tabela<String, Produto> implements ArmazenaObjetos {
     private String bancoDeDados;
 
     public Estoque(String caminho) {
@@ -37,41 +37,41 @@ public class Estoque extends Tabela<Integer, Produto> implements ArmazenaObjetos
         oos.close();
     }
 
-    public Integer adicionarProduto(String nome, float preco, int estoque, String categoria) throws TabelaException {
+    public String adicionarProduto(String nome, float preco, int estoque, String categoria) throws TabelaException {
         Categoria categoriaProduto = Categoria.mapearString(categoria);
         Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
-        Integer id = produto.getId();
+        String identificador = produto.getIdentificador();
 
-        if (contem(id))
-            throw new ProdutoJaExistenteException(id);
+        if (contem(identificador))
+            throw new ProdutoJaExistenteException(identificador);
         else {
             adicionar(produto);
-            return id;
+            return identificador;
         }
     }
 
     @Override
     protected void adicionar(Produto produto) throws TabelaException {
-        Integer id = produto.getId();
-        if (contem(id))
-            throw new ProdutoJaExistenteException(id);
+        String identificador = produto.getIdentificador();
+        if (contem(produto.getIdentificador()))
+            throw new ProdutoJaExistenteException(identificador);
         else
-            tabela.put(id, produto);
+            tabela.put(identificador, produto);
     }
 
     @Override
-    public void remover(Integer id) throws TabelaException {
-        if (!contem(id))
-            throw new ProdutoInexistenteException(id);
+    public void remover(String identificador) throws TabelaException {
+        if (!contem(identificador))
+            throw new ProdutoInexistenteException(identificador);
         else
-            tabela.remove(id);
+            tabela.remove(identificador);
     }
 
     @Override
-    public Produto procurar(Integer id) throws TabelaException {
-        if (!contem(id))
-            throw new ProdutoInexistenteException(id);
+    public Produto procurar(String identificador) throws TabelaException {
+        if (!contem(identificador))
+            throw new ProdutoInexistenteException(identificador);
         else
-            return super.procurar(id);
+            return super.procurar(identificador);
     }
 }

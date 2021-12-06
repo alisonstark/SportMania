@@ -1,7 +1,7 @@
 package Comunicacao;
 
 import Cliente.Cliente;
-import Excecoes.Cliente.*;
+import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
 
 import java.io.*;

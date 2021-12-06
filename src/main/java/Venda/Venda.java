@@ -51,9 +51,9 @@ public class Venda {
         if (cliente != null) {
             cpf = cliente.getCpf();
         }
-        return dataHorario       + separador +
-                produto.getId()  + separador +
-                quantidade       + separador +
-                cpf              + fimDeLinha;
+        return dataHorario                  + separador +
+                produto.getIdentificador()  + separador +
+                quantidade                  + separador +
+                cpf                         + fimDeLinha;
     }
 }
