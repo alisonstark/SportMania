@@ -1,8 +1,10 @@
+import Excecoes.TabelaException;
 import Produto.*;
 import Comunicacao.Estoque;
 import Excecoes.Estoque.*;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,20 +14,16 @@ public class EstoqueTest {
     private static Estoque estoque;
 
     @BeforeAll
-    public static void gerarEstoque() {
+    public static void gerarEstoque() throws TabelaException, IOException {
         estoque = new Estoque("src/test/bancoTestes/estoque.ser");
 
-        try {
-            estoque.adicionarProduto("camiseta", 20.99f, 10, Categoria.ROUPA.toString());
-            estoque.adicionarProduto("tenis", 10.99f, 8, Categoria.CALCADO.toString());
-            estoque.adicionarProduto("bola", 15.99f, 12, Categoria.ACESSORIO.toString());
-            estoque.adicionarProduto("naoimporta", 13.99f, 5, Categoria.EQUIPAMENTO.toString());
-            estoque.adicionarProduto("regata", 18.99f, 15, Categoria.ROUPA.toString());
+        estoque.adicionarProduto("camiseta", 20.99f, 10, Categoria.ROUPA.toString());
+        estoque.adicionarProduto("tenis", 10.99f, 18, Categoria.CALCADO.toString());
+        estoque.adicionarProduto("bola", 15.99f, 12, Categoria.ACESSORIO.toString());
+        estoque.adicionarProduto("naoimporta", 13.99f, 15, Categoria.EQUIPAMENTO.toString());
+        estoque.adicionarProduto("regata", 18.99f, 15, Categoria.ROUPA.toString());
 
-            estoque.atualizarObjetos();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        estoque.atualizarObjetos();
     }
 
     @Test
@@ -67,7 +65,7 @@ public class EstoqueTest {
     public void carregarObjetos_DeveCarregarTodosOsProdutos() {
         Hashtable<String, Produto> copia = estoque.clonar();
         estoque.limpar();
-        assertDoesNotThrow(() -> estoque.carregarObjetos());
+        assertDoesNotThrow(estoque::carregarObjetos);
 
         final Produto[] produtos = new Produto[1];
         for (String chave : copia.keySet()) {

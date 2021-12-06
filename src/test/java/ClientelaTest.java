@@ -1,8 +1,10 @@
 import Cliente.Cliente;
 import Comunicacao.Clientela;
 import Excecoes.Clientela.*;
+import Excecoes.TabelaException;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,21 +14,16 @@ public class ClientelaTest {
     private static Clientela clientela;
 
     @BeforeAll
-    public static void gerarCadastroDeClientes() {
+    public static void gerarCadastroDeClientes() throws IOException, TabelaException {
         clientela = new Clientela("src/test/bancoTestes/clientela.ser");
 
-        try {
-            clientela.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");
-            clientela.cadastrarCliente("Clara Sandra Rodrigues", "53615621735");
-            clientela.cadastrarCliente("Milena Stella Melo", "77796872526");
-            clientela.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703");
-            clientela.cadastrarCliente("Rosângela Ayla Galvão", "63608576002");
+        clientela.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");
+        clientela.cadastrarCliente("Clara Sandra Rodrigues", "53615621735");
+        clientela.cadastrarCliente("Milena Stella Melo", "77796872526");
+        clientela.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703");
+        clientela.cadastrarCliente("Rosângela Ayla Galvão", "63608576002");
 
-            clientela.atualizarObjetos();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        clientela.atualizarObjetos();
     }
 
     @Test
@@ -61,7 +58,7 @@ public class ClientelaTest {
     public void carregarObjetos_DeveCarregarTodosOsClientes() {
         Hashtable<String, Cliente> copia = clientela.clonar();
         clientela.limpar();
-        assertDoesNotThrow(() -> clientela.carregarObjetos());
+        assertDoesNotThrow(clientela::carregarObjetos);
 
         final Cliente[] clientes = new Cliente[1];
         for (String chave : copia.keySet()) {
@@ -87,7 +84,7 @@ public class ClientelaTest {
 
         Hashtable<String, Cliente> copia = clientela.clonar();
         clientela.limpar();
-        assertDoesNotThrow(() -> clientela.carregarObjetos());
+        assertDoesNotThrow(clientela::carregarObjetos);
 
         final Cliente[] cliente = new Cliente[1];
         for (String chave : copia.keySet()) {

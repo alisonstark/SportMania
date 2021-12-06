@@ -1,0 +1,7 @@
+2021/12/06 19:48:50|equipamento::cesta|2|36033023978
+2021/12/06 19:48:50|calcado::tenis|3|nil
+2021/12/06 19:48:50|roupa::regata|1|77796872526
+2021/12/06 19:48:50|roupa::camiseta|5|nil
+2021/12/06 19:48:50|equipamento::naoimporta|4|63608576002
+2021/12/06 19:48:50|calcado::tenis|2|36033023978
+2021/12/06 19:48:51|equipamento::cesta|2|nil
