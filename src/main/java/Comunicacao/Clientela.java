@@ -61,10 +61,10 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
      */
     public void cadastrarCliente(String nome, String cpf) throws TabelaException {
         Cliente cliente = new Cliente(nome, cpf, true);
-        if (contem(cpf)) {
+        if (contem(cpf))
             throw new CpfJaCadastradoException(cpf);
-        }
-        adicionar(cliente);
+        else
+            adicionar(cliente);
     }
 
     @Override
@@ -79,13 +79,15 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
     public void remover(String cpf) throws TabelaException {
         if (!contem(cpf))
             throw new CpfNaoCadastradoException(cpf);
-        tabela.remove(cpf);
+        else
+            tabela.remove(cpf);
     }
 
     @Override
     public Cliente procurar(String cpf) throws TabelaException {
         if (!contem(cpf))
             throw new CpfNaoCadastradoException(cpf);
-        return super.procurar(cpf);
+        else
+            return super.procurar(cpf);
     }
 }

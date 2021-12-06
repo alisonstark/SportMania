@@ -1,71 +1,77 @@
 package Comunicacao;
 
 import Excecoes.Produto.*;
-import Produto.Produto;
-import Produto.Categoria;
+import Excecoes.TabelaException;
+import Produto.*;
 
 import java.io.*;
-import java.util.Hashtable;
 
-public class Estoque {
+public class Estoque extends Tabela<Integer, Produto> implements ArmazenaObjetos {
     private String bancoDeDados;
-    private final Hashtable<Integer, Produto> estoque;
 
     public Estoque(String caminho) {
         this.bancoDeDados = caminho;
-        this.estoque = new Hashtable<>();
     }
 
     public void setBancoDeDados(String caminho) {
         bancoDeDados = caminho;
     }
 
-    public boolean contemProduto(Integer id) {
-        return estoque.containsKey(id);
-    }
-
-    public Produto procurarProduto(Integer id) {
-        return estoque.get(id);
-    }
-
-    public void carregarProdutos() throws IOException, ClassNotFoundException {
+    public void carregarObjetos() throws IOException, ClassNotFoundException, TabelaException {
         FileInputStream fis = new FileInputStream(bancoDeDados);
         ObjectInputStream ois = new ObjectInputStream(fis);
 
         while (fis.available() > 0) {
             Produto produto = (Produto) ois.readObject();
-            estoque.put(produto.getId(), produto);
+            adicionar(produto);
         }
         ois.close();
     }
 
-    public void atualizarProdutos() throws IOException {
+    public void atualizarObjetos() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-        for (Produto produto : estoque.values())
+        for (Produto produto : retornarValores())
             oos.writeObject(produto);
         oos.close();
     }
 
-    // produto que não existe no cadastro de produtos (no estoque)
-    public void adicionarProduto(String nome, float preco, int estoque, String categoria) throws ProdutoJaExistenteException {
+    public Integer adicionarProduto(String nome, float preco, int estoque, String categoria) throws TabelaException {
         Categoria categoriaProduto = Categoria.mapearString(categoria);
         Produto produto = new Produto(nome, preco, estoque, categoriaProduto);
         Integer id = produto.getId();
 
-        if (contemProduto(id))
+        if (contem(id))
+            throw new ProdutoJaExistenteException(id);
+        else {
+            adicionar(produto);
+            return id;
+        }
+    }
+
+    @Override
+    protected void adicionar(Produto produto) throws TabelaException {
+        Integer id = produto.getId();
+        if (contem(id))
             throw new ProdutoJaExistenteException(id);
         else
-            this.estoque.put(id, produto);
+            tabela.put(id, produto);
     }
 
-    // TODO a pensar se vamos precisar...
-    public void retirarProduto(Integer id) throws ProdutoInexistenteException{
-        if (!contemProduto(id))
+    @Override
+    public void remover(Integer id) throws TabelaException {
+        if (!contem(id))
             throw new ProdutoInexistenteException(id);
         else
-            this.estoque.remove(id);
+            tabela.remove(id);
     }
 
+    @Override
+    public Produto procurar(Integer id) throws TabelaException {
+        if (!contem(id))
+            throw new ProdutoInexistenteException(id);
+        else
+            return super.procurar(id);
+    }
 }

@@ -8,14 +8,21 @@ import Produto.*;
 
 public class Venda {
 
-    private static final String clienteNulo = "nil";
-    private static final char separador = '|';
-    private static final char fimDeLinha = '\n';
+    public static final String clienteNulo = "nil";
+    public static final char separador = '|';
+    public static final char fimDeLinha = '\n';
 
     private final Cliente cliente;
     private final Produto produto;
     private final int quantidade;
     private final String dataHorario;
+
+    public Venda(String dataHorario, Cliente cliente, Produto produto, int quantidade) {
+        this.cliente = cliente;
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.dataHorario = dataHorario;
+    }
 
     public Venda(Cliente cliente, Produto produto, int quantidade) {
         this.cliente = cliente;
