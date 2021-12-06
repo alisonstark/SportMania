@@ -5,8 +5,9 @@ import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
 
 import java.io.*;
+import java.util.List;
 
-public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjetos {
+public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjetos, FiltroPor<Cliente, Boolean> {
 
     private String bancoDeDados;
 
@@ -79,10 +80,19 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
     public void remover(String cpf) throws TabelaException {
         if (!contem(cpf))
             throw new CpfNaoCadastradoException(cpf);
-        else
-            tabela.remove(cpf);
+        else {
+            Cliente cliente = procurar(cpf);
+            cliente.setAtividade(false);
+        }
     }
 
+    /**
+     * Devolve o objeto do {@code Cliete} de acordo com o seu CPF
+     *
+     * @param cpf CPF do cliente
+     * @return O {@code Cliente}
+     * @throws TabelaException Se o cliente não for cadastrado
+     */
     @Override
     public Cliente procurar(String cpf) throws TabelaException {
         if (!contem(cpf))
@@ -90,4 +100,12 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
         else
             return super.procurar(cpf);
     }
+
+    public List<Cliente> filtrarPor(Boolean atividade) {
+        return retornarValores()
+                .stream()
+                .filter((cliente) -> cliente.isAtivo() == atividade)
+                .toList();
+    }
+
 }

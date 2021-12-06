@@ -3,7 +3,6 @@ package Produto;
 import Excecoes.Estoque.EstoqueInsuficienteException;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Produto implements Serializable {
@@ -15,18 +14,13 @@ public class Produto implements Serializable {
     private final Categoria categoria;
     private float preco;
     private int estoque;
-    private boolean emEstoque;
-    protected ArrayList<String> cadastroProdutosVendidos;
 
     public Produto(String nome, float preco, int estoque, Categoria categoria) {
-        this.identificador = categoria + "::" + nome;
+        this.identificador = categoria + separador + nome;
         this.nome = nome;
         this.preco = preco;
         this.estoque = Math.max(estoque, 0);
         this.categoria = categoria;
-        this.emEstoque = estoque != 0;
-
-        this.cadastroProdutosVendidos = new ArrayList<>();
     }
 
     public String getIdentificador() {
@@ -49,31 +43,38 @@ public class Produto implements Serializable {
         return estoque;
     }
 
-    public void setEstoque(short adicional) {
-        this.estoque += adicional;
+    public void setEstoque(int estoque) {
+        this.estoque = estoque;
     }
 
     public Categoria getCategoria() {
         return categoria;
     }
 
-    public boolean isEmEstoque() {
-        return emEstoque;
+    public boolean temEstoque() {
+        return estoque > 0;
     }
 
-    public void setEmEstoque(boolean emEstoque) {
-        this.emEstoque = emEstoque;
-    }
-
+    /**
+     * Retira uma certa quantidade do produto do estoque.
+     *
+     * @param quantidade Quantidade a ser retirada
+     * @throws EstoqueInsuficienteException Se nao houver estoque o suficiente
+     */
     public void retirarN(int quantidade) throws EstoqueInsuficienteException {
-        if (estoque < quantidade) {
+        if (estoque < quantidade)
             throw new EstoqueInsuficienteException(identificador);
-        }
-        estoque -= quantidade;
+        else
+            estoque -= quantidade;
     }
 
-    public ArrayList<String> getCadastroProdutosVendidos() {
-        return cadastroProdutosVendidos;
+    /**
+     * Adiciona uma certa quantidade do produto do estoque.
+     *
+     * @param quantidade Quantidade a ser adicionada
+     */
+    public void adicionarN(int quantidade) {
+        estoque += quantidade;
     }
 
     @Override

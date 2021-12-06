@@ -12,10 +12,10 @@ public class Venda {
     public static final char separador = '|';
     public static final char fimDeLinha = '\n';
 
-    private final Cliente cliente;
-    private final Produto produto;
-    private final int quantidade;
-    private final String dataHorario;
+    public final Cliente cliente;
+    public final Produto produto;
+    public final int quantidade;
+    public final String dataHorario;
 
     public Venda(String dataHorario, Cliente cliente, Produto produto, int quantidade) {
         this.cliente = cliente;
