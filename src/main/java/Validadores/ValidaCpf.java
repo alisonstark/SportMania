@@ -1,21 +1,21 @@
 package Validadores;
 
-import Excecoes.Validadores.CpfInvalido;
+import Excecoes.ValidacaoException;
+import Excecoes.Validadores.CpfInvalidoException;
 
-public class ValidaCpf {
+public class ValidaCpf extends Validador {
 
-    private final String original;
     private String modificado;
     private final int[] digits = new int[11];
 
     public ValidaCpf(String cpf) {
-        this.original = cpf;
+        super(cpf.trim());
     }
 
-    private void converteEmDigitos() throws CpfInvalido {
+    private void converteEmDigitos() throws CpfInvalidoException {
         modificado = original.replaceAll("[.-]", "");
         if (!modificado.matches("\\d{11}"))
-            throw new CpfInvalido(original);
+            throw new CpfInvalidoException(original);
 
         for (int i = 0; i < 11; i++)
             digits[i] = modificado.charAt(i) - '0';
@@ -23,7 +23,8 @@ public class ValidaCpf {
     }
 
     // https://www.devmedia.com.br/validando-o-cpf-em-uma-aplicacao-java/22097
-    public String cpfEhValido() throws CpfInvalido {
+    @Override
+    public String ehValido() throws ValidacaoException {
         converteEmDigitos();
 
         boolean tudoIgual = true;
@@ -34,13 +35,13 @@ public class ValidaCpf {
             }
         }
         if (tudoIgual)
-            throw new CpfInvalido(original);
+            throw new CpfInvalidoException(original);
 
         int dig10 = calcula10Digito();
         int dig11 = calcula11Digito();
 
         if (dig10 != digits[9] || dig11 != digits[10])
-            throw new CpfInvalido(original);
+            throw new CpfInvalidoException(original);
 
         return modificado;
     }

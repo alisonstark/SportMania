@@ -2,7 +2,7 @@ import Cliente.Cliente;
 import Comunicacao.Clientela;
 import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
-import Excecoes.Validadores.CpfInvalido;
+import Excecoes.ValidacaoException;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -15,14 +15,14 @@ public class ClientelaTest {
     private static Clientela clientela;
 
     @BeforeAll
-    public static void gerarCadastroDeClientes() throws IOException, TabelaException, CpfInvalido {
+    public static void gerarCadastroDeClientes() throws IOException, TabelaException, ValidacaoException {
         clientela = new Clientela("src/test/bancoTestes/clientela.ser");
 
-        clientela.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");
-        clientela.cadastrarCliente("Clara Sandra Rodrigues", "53615621735");
-        clientela.cadastrarCliente("Milena Stella Melo", "77796872526");
-        clientela.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703");
-        clientela.cadastrarCliente("Rosângela Ayla Galvão", "63608576002");
+        clientela.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978", "6925166749", "isabellegiovannavalentinafernandes_@viasegbrasil.com.br");
+        clientela.cadastrarCliente("Clara Sandra Rodrigues", "53615621735", "8228826933", "clarasandrarodrigues-85@embraer.com");
+        clientela.cadastrarCliente("Milena Stella Melo", "77796872526", "6327388690", "mmilenastellamelo@br.pwc.com");
+        clientela.cadastrarCliente("Sérgio Marcelo Almeida", "30063939703", "4126379251", "sergiomarceloalmeida_@marcossousa.com");
+        clientela.cadastrarCliente("Rosângela Ayla Galvão", "63608576002", "8336638747", "rosangelaaylagalvao..rosangelaaylagalvao@msn.com.br");
 
         clientela.atualizarObjetos();
     }
@@ -31,8 +31,10 @@ public class ClientelaTest {
     public void cadastrarCliente_DeveTerSucesso_QuandoCpfAindaNaoFoiCadastrado() {
         String nomeEsperado = "Cristiane Gabriela Almeida";
         String cpfEsperado = "45742554478";
+        String telefoneEsperado = "6135759904";
+        String emailEsperado = "ccristianegabrielaalmeida@bfgadvogados.com";
 
-        assertDoesNotThrow(() -> clientela.cadastrarCliente(nomeEsperado, cpfEsperado));
+        assertDoesNotThrow(() -> clientela.cadastrarCliente(nomeEsperado, cpfEsperado, telefoneEsperado, emailEsperado));
 
         assertTrue(clientela.contem(cpfEsperado));
 
@@ -42,6 +44,8 @@ public class ClientelaTest {
 
         assertEquals(cliente.getNome(), nomeEsperado);
         assertEquals(cliente.getCpf(), cpfEsperado);
+        assertEquals(cliente.getTelefone(), telefoneEsperado);
+        assertEquals(cliente.getEmail(), emailEsperado);
         assertTrue(cliente.isAtivo());
 
         assertDoesNotThrow(() -> clientela.remover(cpfEsperado));
@@ -49,10 +53,12 @@ public class ClientelaTest {
 
     @Test
     public void cadastrarCliente_DeveFalhar_QuandoCpfJaFoiCadastrado() {
-        String nome = "Joao";
+        String nome = "Luiz Manuel Marcos Ramos";
         String cpf = "36033023978";
+        String telefone = "9537550180";
+        String email = "luizmanuelmarcosramos-86@life.com";
 
-        assertThrows(CpfJaCadastradoException.class, () -> clientela.cadastrarCliente(nome, cpf));
+        assertThrows(CpfJaCadastradoException.class, () -> clientela.cadastrarCliente(nome, cpf, telefone, email));
     }
 
     @Test
@@ -77,10 +83,12 @@ public class ClientelaTest {
 
     @Test
     public void atualizarObjetos_DeveAtualizarOBancoDeDados() {
-        String nomeEsperado = "Cristiane Gabriela Almeida";
-        String cpfEsperado = "45742554478";
+        String nome = "Cristiane Gabriela Almeida";
+        String cpf = "45742554478";
+        String telefone = "6135759904";
+        String email = "ccristianegabrielaalmeida@bfgadvogados.com";
 
-        assertDoesNotThrow(() -> clientela.cadastrarCliente(nomeEsperado, cpfEsperado));
+        assertDoesNotThrow(() -> clientela.cadastrarCliente(nome, cpf, telefone, email));
         assertDoesNotThrow(clientela::atualizarObjetos);
 
         Hashtable<String, Cliente> copia = clientela.clonar();

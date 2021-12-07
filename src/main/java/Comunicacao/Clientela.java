@@ -3,7 +3,7 @@ package Comunicacao;
 import Cliente.Cliente;
 import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
-import Excecoes.Validadores.CpfInvalido;
+import Excecoes.ValidacaoException;
 
 import java.io.*;
 import java.util.List;
@@ -62,8 +62,8 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
      * @param cpf Cpf do cliente
      * @throws CpfJaCadastradoException Se o cpf já estiver cadastrado
      */
-    public void cadastrarCliente(String nome, String cpf) throws TabelaException, CpfInvalido {
-        Cliente cliente = new Cliente(nome, cpf, true);
+    public void cadastrarCliente(String nome, String cpf, String telefone, String email) throws TabelaException, ValidacaoException {
+        Cliente cliente = new Cliente(nome, cpf, telefone, email, true);
         if (contem(cpf))
             throw new CpfJaCadastradoException(cpf);
         else
