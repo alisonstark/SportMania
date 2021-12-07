@@ -100,7 +100,7 @@ public class Vendas implements ArmazenaTexto, FiltroPor<Venda, Cliente> {
         BufferedReader br = new BufferedReader(fr);
         Stream<String> stream = br.lines();
 
-        for (String line : stream.toList()) {
+        for (String line : stream.toArray(String[]::new)) {
             Venda venda = fromString(line);
             registroDeVendas.add(venda);
         }

@@ -2,6 +2,7 @@ import Cliente.Cliente;
 import Comunicacao.Clientela;
 import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
+import Excecoes.Validadores.CpfInvalido;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class ClientelaTest {
     private static Clientela clientela;
 
     @BeforeAll
-    public static void gerarCadastroDeClientes() throws IOException, TabelaException {
+    public static void gerarCadastroDeClientes() throws IOException, TabelaException, CpfInvalido {
         clientela = new Clientela("src/test/bancoTestes/clientela.ser");
 
         clientela.cadastrarCliente("Isabelle Giovanna Valentina Fernandes", "36033023978");

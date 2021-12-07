@@ -1,5 +1,8 @@
 package Cliente;
 
+import Excecoes.Validadores.CpfInvalido;
+import Validadores.ValidaCpf;
+
 import java.io.*;
 
 public class Cliente implements Serializable {
@@ -7,9 +10,11 @@ public class Cliente implements Serializable {
     private final String cpf;
     private boolean ativo;
 
-    public Cliente(String nome, String cpf, boolean ativo) {
-        this.nome = nome;
-        this.cpf = cpf;
+    public Cliente(String nome, String cpf, boolean ativo) throws CpfInvalido {
+        ValidaCpf validaCpf = new ValidaCpf(cpf);
+
+        this.nome = nome.trim();
+        this.cpf = validaCpf.cpfEhValido();
         this.ativo = ativo;
     }
 

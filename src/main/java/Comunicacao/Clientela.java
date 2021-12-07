@@ -3,6 +3,7 @@ package Comunicacao;
 import Cliente.Cliente;
 import Excecoes.Clientela.*;
 import Excecoes.TabelaException;
+import Excecoes.Validadores.CpfInvalido;
 
 import java.io.*;
 import java.util.List;
@@ -43,6 +44,7 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
      *
      * @throws IOException Se ocorrer erro na escrita do arquivo
      */
+    @Override
     public void atualizarObjetos() throws IOException {
         FileOutputStream fos = new FileOutputStream(bancoDeDados);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -60,7 +62,7 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
      * @param cpf Cpf do cliente
      * @throws CpfJaCadastradoException Se o cpf já estiver cadastrado
      */
-    public void cadastrarCliente(String nome, String cpf) throws TabelaException {
+    public void cadastrarCliente(String nome, String cpf) throws TabelaException, CpfInvalido {
         Cliente cliente = new Cliente(nome, cpf, true);
         if (contem(cpf))
             throw new CpfJaCadastradoException(cpf);
@@ -101,10 +103,11 @@ public class Clientela extends Tabela<String, Cliente> implements ArmazenaObjeto
             return super.procurar(cpf);
     }
 
+    @Override
     public List<Cliente> filtrarPor(Boolean atividade) {
         return retornarValores()
                 .stream()
-                .filter((cliente) -> cliente.isAtivo() == atividade)
+                .filter(cliente -> cliente.isAtivo() == atividade)
                 .toList();
     }
 

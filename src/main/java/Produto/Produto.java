@@ -78,6 +78,11 @@ public class Produto implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return categoria + " " + nome + " " + estoque;
+    }
+
+    @Override
     public boolean equals(Object outro) {
         if (this == outro)
             return true;
